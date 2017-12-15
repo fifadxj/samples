@@ -1,4 +1,4 @@
-package sample.rest;
+package sample.springboot.rest;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import lombok.Getter;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Random;
 
 /**
  * Created by za-daixiaojun on 2017/12/13.

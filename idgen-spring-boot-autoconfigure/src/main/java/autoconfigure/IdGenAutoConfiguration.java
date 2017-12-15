@@ -1,4 +1,4 @@
-package sample;
+package autoconfigure;
 
 import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
 import com.dangdang.ddframe.rdb.sharding.id.generator.self.IPIdGenerator;
