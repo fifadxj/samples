@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name=”viewport” content=”initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=no”>
+    <title>Sql</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
+
+    <style type="text/css">
+
+    </style>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#query").click(function () {
+                refresh('query');
+            });
+
+            $("#update").click(function () {
+                refresh('update');
+            });
+        });
+
+        var refresh = function(url) {
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify({
+                    sql: $("#sql").val()
+                }),
+                success: function (json) {
+                    var tableHeaders = '';
+                    $.each(json.columnNames, function (i, val) {
+                        tableHeaders += "<th>" + val + "</th>";
+                    });
+
+                    $("#tableDiv").empty();
+                    $("#result").empty();
+                    $("#executeSqlDetails").empty();
+
+                    if (json.success) {
+                        $('#result').text("成功");
+                        $('#result').css('color', 'green');
+
+                        $("#tableDiv").append('<table id="displayTable" class="display" cellspacing="0"><thead><tr>'
+                                + tableHeaders + '</tr></thead></table>');
+
+                        /*$('#effectRows').text(json.effectRows.join(", "));*/
+
+                        var executeSqlDetails = '';
+                        $.each(json.executeSqlDetails, function (i, val) {
+                            executeSqlDetails += "<p>" + val + "</p>";
+                        });
+                        $('#executeSqlDetails').append(executeSqlDetails);
+
+                        if (json.columnNames.length > 0) {
+                            $('#displayTable').dataTable({
+                                data: json.rows
+                            });
+                        }
+
+                    } else {
+                        $('#result').text("失败");
+                        $('#result').css('color', 'red');
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+
+<div style="text-align:center;">
+    <H3>SQL</H3>
+    <textarea cols="50" rows="5" id="sql" style="width: 80%; font-size: 1.5rem"></textarea>
+
+    <p>
+        <a class="ui-button ui-widget ui-corner-all" href="#" id="query">SELECT</a>
+        <a class="ui-button ui-widget ui-corner-all" href="#" id="update">CREATE, DROP, INSERT, UPDATE, DELETE</a>
+    </p>
+
+    <p>
+        <span id="result"></span>
+        <!--<span>生效行数:</span> <span id="effectRows"></span>-->
+    </p>
+    <div id="executeSqlDetails" style="color:blue"></div>
+    <div id="tableDiv" style="margin:0 auto;width:80%">
+    </div>
+</div>
+
+</body>
+</html>

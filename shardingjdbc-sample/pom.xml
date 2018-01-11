@@ -11,17 +11,38 @@
     </parent>
 
     <groupId>sample</groupId>
-    <artifactId>spring-boot-sample</artifactId>
+    <artifactId>shardingjdbc-sample</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+    </properties>
+
     <dependencies>
+        <dependency>
+            <groupId>sample</groupId>
+            <artifactId>cat-client</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/cat-client-1.4.0.jar</systemPath>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+            <groupId>io.shardingjdbc</groupId>
+            <artifactId>sharding-jdbc-core</artifactId>
+            <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.shardingjdbc</groupId>
+            <artifactId>sharding-jdbc-orchestration</artifactId>
+            <version>2.0.0</version>
         </dependency>
 
         <dependency>
@@ -37,20 +58,31 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.16.16</version>
         </dependency>
 
         <dependency>
-            <groupId>sample</groupId>
-            <artifactId>idgen-spring-boot-starter</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
