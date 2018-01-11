@@ -87,9 +87,4 @@ public final class MyKeyGenerator implements KeyGenerator {
         }
         return time;
     }
-
-    public static void main(String[] args) {
-        MyKeyGenerator gen = new MyKeyGenerator();
-        System.out.println(gen.generateKey());
-    }
 }
