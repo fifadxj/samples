@@ -68,10 +68,10 @@ public class SqlService {
     public SqlResp query(String sql) throws SQLException {
         SqlResp resp = new SqlResp();
 
-        try (
-                Connection conn = dataSource.getConnection();
-                PreparedStatement preparedStatement = conn.prepareStatement(sql);
-        ) {
+        Connection conn = null;
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement preparedStatement = conn.prepareStatement(sql);
 
             ResultSet rs = preparedStatement.executeQuery();
             ResultSetMetaData resultSetMetaData = rs.getMetaData();
@@ -92,6 +92,10 @@ public class SqlService {
 
             }
             rs.close();
+        }  finally {
+            if (conn != null) {
+                conn.close();
+            }
         }
 
         resp.getExecuteSqlDetails().addAll(Context.SQL_EXECUTE_LIST.get());

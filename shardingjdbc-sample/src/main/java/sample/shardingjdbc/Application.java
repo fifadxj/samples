@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
+import sample.shardingjdbc.util.algorithm.MyInlineShardingStrategyConfiguration;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -77,12 +78,12 @@ public class Application {
         orderTableRuleConfig.setKeyGeneratorColumnName("id");
 
         // 配置分库策略
-        userTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("id", "ds_${(id % 4).intdiv(2)}"));
-        orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "ds_${(user_id % 4).intdiv(2)}"));
+        userTableRuleConfig.setDatabaseShardingStrategyConfig(new MyInlineShardingStrategyConfiguration("id", "ds_${(id % 4).intdiv(2)}"));
+        orderTableRuleConfig.setDatabaseShardingStrategyConfig(new MyInlineShardingStrategyConfiguration("user_id", "ds_${(user_id % 4).intdiv(2)}"));
 
         // 配置分表策略
-        userTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("id", "user_${id % 4}"));
-        orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("user_id", "order_${user_id % 4}"));
+        userTableRuleConfig.setTableShardingStrategyConfig(new MyInlineShardingStrategyConfiguration("id", "user_${id % 4}"));
+        orderTableRuleConfig.setTableShardingStrategyConfig(new MyInlineShardingStrategyConfiguration("user_id", "order_${user_id % 4}"));
 
         // 配置分片规则
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
