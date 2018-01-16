@@ -26,6 +26,6 @@ public class JsonUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(objectMapper.readValue("sa", Object.class));
+        System.out.println(objectMapper.readValue("{}", Object.class));
     }
 }

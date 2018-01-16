@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="30 seconds">
 
-	<property name="log.dir" value="${catalina.home}/logs/" />
+	<property name="log.dir" value="/logs/" />
 	<property name="log.level" value="INFO" />
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
