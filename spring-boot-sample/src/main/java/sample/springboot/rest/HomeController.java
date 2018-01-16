@@ -1,12 +1,14 @@
 package sample.springboot.rest;
 
-import com.dangdang.ddframe.rdb.sharding.id.generator.IdGenerator;
+import io.shardingjdbc.core.keygen.KeyGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -22,7 +24,7 @@ public class HomeController {
     private String version;
 
     @Autowired
-    private IdGenerator idGenerator;
+    private KeyGenerator idGenerator;
     @Autowired
     private DataSource dataSource;
 
@@ -33,11 +35,9 @@ public class HomeController {
         Resp resp = new Resp();
         resp.setValue(new SimpleDateFormat("yyyy MM dd : HH mm ss").format(req.getDate()));
         resp.setVersion(version);
-        resp.setId(idGenerator.generateId().longValue());
+        resp.setId(idGenerator.generateKey().longValue());
         resp.setDate(req.getDate());
         resp.setAmount(BigDecimal.ZERO.setScale(2));
-
-        dataSource.getConnection();
 
         return resp;
     }
