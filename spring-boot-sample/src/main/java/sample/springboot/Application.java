@@ -4,14 +4,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 @SpringBootApplication
 @ImportResource({"classpath:/spring.xml"})
-@PropertySource("classpath:/env/${env}.properties")
+//@PropertySource("classpath:/env/${env}.properties")
 public class Application {
     public static void main(String[] args) throws Exception {
-        System.setProperty("env", "test");
+        System.setProperty("env", "DEV");
         SpringApplication.run(Application.class, args);
 
 //        ObjectMapper mapper = new ObjectMapper();

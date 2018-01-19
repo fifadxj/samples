@@ -1,14 +1,13 @@
 package sample.springboot.rest;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import io.shardingjdbc.core.keygen.KeyGenerator;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
@@ -20,7 +19,7 @@ import java.util.Date;
  */
 @RestController
 public class HomeController {
-    @Value("${version}")
+    //@Value("${version}")
     private String version;
 
     @Autowired
@@ -28,7 +27,16 @@ public class HomeController {
     @Autowired
     private DataSource dataSource;
 
-    @RequestMapping("/")
+    private Config appConfig;
+
+    private Config catConfig;
+
+    public HomeController() {
+        appConfig = ConfigService.getAppConfig();
+        catConfig = ConfigService.getConfig("TEST2.cat");
+    }
+
+    @RequestMapping(value = "/", method = { RequestMethod.POST })
     @ResponseBody
     Resp home(@RequestBody Req req) throws Exception {
         //org.codehaus.jackson.map.util.StdDateFormat
@@ -38,6 +46,26 @@ public class HomeController {
         resp.setId(idGenerator.generateKey().longValue());
         resp.setDate(req.getDate());
         resp.setAmount(BigDecimal.ZERO.setScale(2));
+
+        return resp;
+    }
+
+    @RequestMapping(value = "/apollo/getAppConfig", method = { RequestMethod.GET })
+    @ResponseBody
+    Resp getAppConfig(@RequestParam String key) throws Exception {
+        String value = appConfig.getProperty(key, null);
+        Resp resp = new Resp();
+        resp.setValue(value);
+
+        return resp;
+    }
+
+    @RequestMapping(value = "/apollo/getCatConfig", method = { RequestMethod.GET })
+    @ResponseBody
+    Resp getCatConfig(@RequestParam String key) throws Exception {
+        String value = catConfig.getProperty(key, null);
+        Resp resp = new Resp();
+        resp.setValue(value);
 
         return resp;
     }
