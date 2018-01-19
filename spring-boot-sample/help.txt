@@ -1,0 +1,12 @@
+#portal
+http://47.96.159.210:8070
+
+#Eureka
+http://47.96.159.210:8080
+
+#configService
+47.96.159.210:8080
+-Deureka.instance.ip-address=47.96.159.210
+
+#adminService
+47.96.159.210:8090
