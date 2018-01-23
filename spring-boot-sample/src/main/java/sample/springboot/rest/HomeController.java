@@ -1,18 +1,17 @@
 package sample.springboot.rest;
 
 import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.model.ConfigChange;
+import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import io.shardingjdbc.core.keygen.KeyGenerator;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created by za-daixiaojun on 2017/12/13.
@@ -34,6 +33,17 @@ public class HomeController {
     public HomeController() {
         appConfig = ConfigService.getAppConfig();
         catConfig = ConfigService.getConfig("TEST2.cat");
+
+        appConfig.addChangeListener(new ConfigChangeListener() {
+            @Override
+            public void onChange(ConfigChangeEvent changeEvent) {
+                System.out.println("Changes for namespace " + changeEvent.getNamespace());
+                for (String key : changeEvent.changedKeys()) {
+                    ConfigChange change = changeEvent.getChange(key);
+                    System.out.println(String.format("Found change - key: %s, oldValue: %s, newValue: %s, changeType: %s", change.getPropertyName(), change.getOldValue(), change.getNewValue(), change.getChangeType()));
+                }
+            }
+        });
     }
 
     @RequestMapping(value = "/", method = { RequestMethod.POST })
@@ -49,41 +59,5 @@ public class HomeController {
 
         return resp;
     }
-
-    @RequestMapping(value = "/apollo/getAppConfig", method = { RequestMethod.GET })
-    @ResponseBody
-    Resp getAppConfig(@RequestParam String key) throws Exception {
-        String value = appConfig.getProperty(key, null);
-        Resp resp = new Resp();
-        resp.setValue(value);
-
-        return resp;
-    }
-
-    @RequestMapping(value = "/apollo/getCatConfig", method = { RequestMethod.GET })
-    @ResponseBody
-    Resp getCatConfig(@RequestParam String key) throws Exception {
-        String value = catConfig.getProperty(key, null);
-        Resp resp = new Resp();
-        resp.setValue(value);
-
-        return resp;
-    }
-}
-
-@Getter
-@Setter
-class Resp {
-    private String value;
-    private String version;
-    private long id;
-    private Date date;
-    private BigDecimal amount;
-}
-
-@Getter
-@Setter
-class Req {
-    private Date date;
 }
 
