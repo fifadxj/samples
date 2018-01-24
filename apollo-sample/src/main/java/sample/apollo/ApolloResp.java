@@ -1,4 +1,4 @@
-package sample.springboot.apollo;
+package sample.apollo;
 
 import lombok.Getter;
 import lombok.Setter;

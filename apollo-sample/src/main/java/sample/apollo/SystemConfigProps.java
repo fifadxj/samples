@@ -1,4 +1,4 @@
-package sample.springboot.apollo;
+package sample.apollo;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigChangeListener;
@@ -6,17 +6,9 @@ import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.enums.PropertyChangeType;
 import com.ctrip.framework.apollo.model.ConfigChange;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
-import com.ctrip.framework.apollo.spring.annotation.ApolloConfigChangeListener;
-import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
-import org.springframework.cloud.context.scope.refresh.RefreshScope;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +18,7 @@ import java.util.Map;
  */
 @Getter
 @Setter
-@Component
+//@Component
 public class SystemConfigProps {
     private Map<String, String> appProps = new HashMap<String, String>();
 
@@ -37,8 +29,8 @@ public class SystemConfigProps {
     private Config catConfig;
 
     @Bean
-    public SystemConfigBean systemConfigBean() {
-        return new SystemConfigBean();
+    public JavaDefinedBean systemConfigBean() {
+        return new JavaDefinedBean();
     }
 
     public SystemConfigProps() {

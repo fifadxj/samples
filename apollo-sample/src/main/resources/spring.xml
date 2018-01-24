@@ -7,4 +7,9 @@
 	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/springbeans.xsd
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd">
 
+	<bean id="xmlDefinedBean" class="sample.apollo.XmlDefinedBean">
+		<property name="version" value="#{env['local.file.version']}" />
+		<property name="version2" value="#{env['local.file2.version']}" />
+	</bean>
+
 </beans>

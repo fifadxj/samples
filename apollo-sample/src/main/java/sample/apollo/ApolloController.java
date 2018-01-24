@@ -1,21 +1,25 @@
-package sample.springboot.apollo;
+package sample.apollo;
 
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by za-daixiaojun on 2017/12/13.
  */
 @RestController
-public class ApolloController {
-    @Autowired
+public class ApolloController implements ApplicationContextAware {
+    //@Autowired
     private SystemConfigProps systemConfigProps;
 
     @Autowired
-    private SystemConfigBean systemConfigBean;
+    private JavaDefinedBean javaDefinedBean;
 
     public ApolloController() {
-
+        System.out.println();
     }
 
     @RequestMapping(value = "/apollo/getAppConfig", method = { RequestMethod.GET })
@@ -31,13 +35,19 @@ public class ApolloController {
     @RequestMapping(value = "/apollo/getConfigs", method = { RequestMethod.GET })
     @ResponseBody
     ApolloResp getConfigs() throws Exception {
-        String name = systemConfigBean.getName();
-        String value = systemConfigBean.getValue();
-        String version = systemConfigBean.getVersion();
+        String name = javaDefinedBean.getName();
+        String value = javaDefinedBean.getValue();
+        String version = javaDefinedBean.getVersion();
         ApolloResp resp = new ApolloResp();
-        resp.setValue(name + " " + value + " " + version);
+        resp.setValue(name + " " + value + " " + version + " ");
 
         return resp;
     }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
+    }
+    ApplicationContext context;
 }
 
