@@ -2,12 +2,15 @@
 	   xmlns:context="http://www.springframework.org/schema/context"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	   xmlns:util="http://www.springframework.org/schema/util"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
 	   http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 	   http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/springbeans.xsd
-       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd">
+       http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<bean id="xmlDefinedBean" class="sample.apollo.XmlDefinedBean">
+	<bean id="xmlDefinedBean" class="sample.apollo.XmlDefinedBean" scope="refresh">
+		<aop:scoped-proxy />
 		<property name="version" value="#{env['local.file.version']}" />
 		<property name="version2" value="#{env['local.file2.version']}" />
 	</bean>

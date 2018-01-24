@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by za-daixiaojun on 2017/12/13.
  */
 @RestController
-public class ApolloController implements ApplicationContextAware {
+public class ApolloController {
     //@Autowired
     private SystemConfigProps systemConfigProps;
 
@@ -43,11 +43,5 @@ public class ApolloController implements ApplicationContextAware {
 
         return resp;
     }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.context = applicationContext;
-    }
-    ApplicationContext context;
 }
 

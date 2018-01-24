@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 /**
  * Created by za-daixiaojun on 2018/1/23.
  */
-@Component
+//@Component
 public class SystemConfigListener {
     public SystemConfigListener() {
     }

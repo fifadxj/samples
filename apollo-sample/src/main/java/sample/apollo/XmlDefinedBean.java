@@ -9,8 +9,10 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
  */
 @Getter
 @Setter
-@RefreshScope
 public class XmlDefinedBean {
+    public XmlDefinedBean() {
+        System.out.println();
+    }
     private String version;
     private String version2;
 }

@@ -42,103 +42,16 @@ public class ApolloConfig {
     @Autowired
     private RefreshScope refreshScope;
 
-/*    @Bean
-    @Lazy(false)
-    @org.springframework.cloud.context.config.annotation.RefreshScope
-    public ApolloPropertiesFactoryBean env() {
-        ApolloPropertiesFactoryBean factory = new ApolloPropertiesFactoryBean();
-        List<String> namespaces = new ArrayList<>();
-        namespaces.add("application");
-        namespaces.add("TEST2.cat");
-        factory.setNamespaces(namespaces);
-        factory.setLocations(new ClassPathResource("/env/test.properties"));
-        factory.setRefreshScope(refreshScope);
-        return factory;
-    }*/
-
     @Bean
-    @Lazy(false)
     @org.springframework.cloud.context.config.annotation.RefreshScope
     public Properties env() {
-        Properties remoteProps = new Properties();
-        List<Config> apolloConfigs = new ArrayList<Config>();
+        ConfigPropertiesBuilder builder = new ConfigPropertiesBuilder();
+        Properties props = builder
+                .addNamespaces("application", "TEST2.cat")
+                .addLocations("/env/test.properties", "/env/test2.properties")
+                .refreshScope(refreshScope)
+                .build();
 
-        List<String> namespaces = new ArrayList<>();
-        namespaces.add("application");
-        namespaces.add("TEST2.cat");
-
-        for (String namespace : namespaces) {
-            Config config = ConfigService.getConfig(namespace);
-
-            for (String key : config.getPropertyNames()) {
-                remoteProps.put(key, config.getProperty(key, null));
-            }
-            apolloConfigs.add(config);
-        }
-        configureListeners(apolloConfigs);
-
-        List<String> locations = new ArrayList<>();
-        locations.add("/env/test.properties");
-        locations.add("/env/test2.properties");
-        Properties localProps = new Properties();
-        for (String location : locations) {
-            Properties local = loadFromResource(location);
-            localProps.putAll(local);
-        }
-
-        localProps.putAll(remoteProps);
-
-        return localProps;
-    }
-
-    private void configureListeners(List<Config> configs) {
-        for (Config config : configs) {
-/*            config.addChangeListener(new ConfigChangeListener() {
-                @Override
-                public void onChange(ConfigChangeEvent changeEvent) {
-                    System.out.println("Changes for namespace " + changeEvent.getNamespace());
-                    for (String key : changeEvent.changedKeys()) {
-                        ConfigChange change = changeEvent.getChange(key);
-                        System.out.println(String.format("Found change - key: %s, propertyName: %s, oldValue: %s, newValue: %s, changeType: %s", key, change.getPropertyName(), change.getOldValue(), change.getNewValue(), change.getChangeType()));
-                        if (PropertyChangeType.ADDED == change.getChangeType() || PropertyChangeType.MODIFIED == change.getChangeType()) {
-                            props.put(key, change.getNewValue());
-                        } else if (PropertyChangeType.DELETED.equals(change.getChangeType())) {
-                            props.remove(key);
-                        }
-                    }
-                }
-            });*/
-
-            config.addChangeListener(new ConfigChangeListener() {
-                @Override
-                public void onChange(ConfigChangeEvent changeEvent) {
-                    refreshScope.refreshAll();
-                }
-            });
-        }
-    }
-
-    private Properties loadFromResource(String namespace) {
-        InputStream in = ClassLoaderUtil.getLoader().getResourceAsStream(namespace);
-        Properties properties = null;
-
-        if (in != null) {
-            properties = new Properties();
-
-            try {
-                properties.load(in);
-            } catch (IOException ex) {
-                Tracer.logError(ex);
-                log.error("Load resource config for namespace {} failed", namespace, ex);
-            } finally {
-                try {
-                    in.close();
-                } catch (IOException ex) {
-                    // ignore
-                }
-            }
-        }
-
-        return properties;
+        return props;
     }
 }
