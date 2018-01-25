@@ -10,7 +10,7 @@
     <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-1.12.4.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-
+    <script type="text/javascript" language="javascript" src="//cdn.datatables.net/plug-ins/1.10.16/api/order.neutral().js"></script>
 
     <style type="text/css">
 
@@ -62,8 +62,9 @@
 
                         if (json.columnNames.length > 0) {
                             $('#displayTable').dataTable({
-                                data: json.rows
-                            });
+                                data: json.rows,
+                                ordering: false
+                            }).order.neutral().draw();
                         }
 
                     } else {
