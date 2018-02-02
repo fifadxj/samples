@@ -13,7 +13,7 @@ public class ApolloController2 {
     private XmlDefinedBean xmlDefinedBean;
 
     public ApolloController2() {
-        System.out.println();
+
     }
 
 

@@ -5,6 +5,7 @@ import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.utils.ClassLoaderUtil;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.ctrip.framework.apollo.tracer.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,8 +48,8 @@ public class ApolloConfig {
     public Properties env() {
         ConfigPropertiesBuilder builder = new ConfigPropertiesBuilder();
         Properties props = builder
-                .addNamespaces("application", "TEST2.cat")
-                .addLocations("/env/test.properties", "/env/test2.properties")
+                //.addNamespaces("application", "TEST2.cat")
+                //.addLocations("/env/test.properties", "/env/test2.properties")
                 .refreshScope(refreshScope)
                 .build();
 

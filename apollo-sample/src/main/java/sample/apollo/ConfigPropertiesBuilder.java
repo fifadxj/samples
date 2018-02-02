@@ -3,6 +3,7 @@ package sample.apollo;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.core.ConfigConsts;
 import com.ctrip.framework.apollo.core.utils.ClassLoaderUtil;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.tracer.Tracer;
@@ -24,6 +25,13 @@ public class ConfigPropertiesBuilder {
     private List<String> locations = new ArrayList<>();
     private RefreshScope refreshScope;
 
+    private final String NAMESPACE_COMMON = "TEST2.CAT";
+
+    public ConfigPropertiesBuilder() {
+        namespaces.add(ConfigConsts.NAMESPACE_APPLICATION);
+        namespaces.add(NAMESPACE_COMMON);
+    }
+
     public ConfigPropertiesBuilder refreshScope(RefreshScope refreshScope) {
         this.refreshScope = refreshScope;
         return this;
@@ -40,7 +48,9 @@ public class ConfigPropertiesBuilder {
             }
             apolloConfigs.add(config);
         }
-        configureListeners(apolloConfigs);
+        if (refreshScope != null) {
+            configureListeners(apolloConfigs);
+        }
 
         Properties localProps = new Properties();
         for (String location : locations) {

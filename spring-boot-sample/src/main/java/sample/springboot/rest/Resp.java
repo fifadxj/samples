@@ -14,7 +14,8 @@ import java.util.Date;
 public class Resp {
     private String value;
     private String version;
+    private String version2;
     private long id;
     private Date date;
-    private BigDecimal amount;
+    private int amount;
 }

@@ -3,9 +3,13 @@ package sample.shardingjdbc.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sample.shardingjdbc.mapper.UserMapper;
+import sample.shardingjdbc.model.User;
+import sample.shardingjdbc.req.SqlReq;
 import sample.shardingjdbc.resp.SqlResp;
 import sample.shardingjdbc.util.Context;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,8 +21,11 @@ import java.util.List;
 @Slf4j
 @Service
 public class SqlService {
-    @Autowired
+    @Resource(name = "shardingJdbcDataSource")
     private DataSource dataSource;
+
+    @Autowired
+    private UserMapper userMapper;
 
     public SqlResp update(String sql) throws SQLException {
         SqlResp resp = new SqlResp();
@@ -61,6 +68,24 @@ public class SqlService {
         }
 
         resp.getExecuteSqlDetails().addAll(Context.SQL_EXECUTE_LIST.get());
+
+        return resp;
+    }
+
+    public SqlResp mybatisQuery(SqlReq sql) {
+        SqlResp resp = new SqlResp();
+
+        List<User> users = userMapper.selectBySql(sql);
+        resp.getColumnNames().add("id");
+        resp.getColumnNames().add("username");
+        resp.getColumnNames().add("password");
+        for (User user : users) {
+            List<String> row = new ArrayList<>();
+            row.add(user.getId().toString());
+            row.add(user.getUsername());
+            row.add(user.getPassword());
+            resp.getRows().add(row);
+        }
 
         return resp;
     }
