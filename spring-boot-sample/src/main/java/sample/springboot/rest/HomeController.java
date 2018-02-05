@@ -20,7 +20,7 @@ public class HomeController {
     @Autowired
     private KeyGenerator idGenerator;
 
-    //@Value("#{env['version']}")
+    @Value("#{env['version']}")
     private String version;
 
     //@Value("#{env['version']}")

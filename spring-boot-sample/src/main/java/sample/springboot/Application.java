@@ -32,7 +32,7 @@ public class Application {
     @Autowired
     private RefreshScope refreshScope;
 
-    //@Bean
+    @Bean
     @org.springframework.cloud.context.config.annotation.RefreshScope
     public Properties env() {
         ApolloPropertiesFactory factory = new ApolloPropertiesFactory();

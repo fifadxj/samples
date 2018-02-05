@@ -43,7 +43,7 @@ public class ApolloConfig {
     @Autowired
     private RefreshScope refreshScope;
 
-    @Bean
+    //@Bean
     @org.springframework.cloud.context.config.annotation.RefreshScope
     public Properties env() {
         ConfigPropertiesBuilder builder = new ConfigPropertiesBuilder();

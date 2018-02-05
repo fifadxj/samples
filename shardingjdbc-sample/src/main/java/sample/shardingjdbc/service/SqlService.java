@@ -87,6 +87,8 @@ public class SqlService {
             resp.getRows().add(row);
         }
 
+        resp.getExecuteSqlDetails().addAll(Context.SQL_EXECUTE_LIST.get());
+
         return resp;
     }
 

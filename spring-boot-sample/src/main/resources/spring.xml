@@ -13,6 +13,6 @@
 
 	<bean id="settings" class="sample.springboot.rest.Settings" scope="refresh">
 		<aop:scoped-proxy />
-		<property name="value" value="#{env['value']}"/>
+		<property name="value" value="#{env['version']}"/>
 	</bean>
 </beans>

@@ -1,5 +1,8 @@
 package sample.shardingjdbc;
 
+import cn.sccfc.cat.springaop.CatAopService;
+import cn.sccfc.cat.springboot.CatFilterConfigure;
+import cn.sccfc.cat.springmvcurl.CatPageURIRewriteAspect;
 import com.alibaba.druid.pool.DruidDataSource;
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
@@ -14,10 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import sample.shardingjdbc.util.algorithm.MyInlineShardingStrategyConfiguration;
@@ -33,6 +33,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @SpringBootApplication
 @ServletComponentScan("sample.shardingjdbc")
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
+@Import({ CatFilterConfigure.class, CatPageURIRewriteAspect.class, CatAopService.class })
 @ImportResource({"classpath:/spring.xml"})
 //@PropertySource("classpath:/application.properties")
 public class Application {
