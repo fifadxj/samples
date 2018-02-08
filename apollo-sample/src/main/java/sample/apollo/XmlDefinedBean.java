@@ -14,5 +14,4 @@ public class XmlDefinedBean {
 
     }
     private String version;
-    private String version2;
 }

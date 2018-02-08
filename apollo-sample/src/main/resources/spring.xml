@@ -9,10 +9,11 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+	<!--<bean id="refreshAutoConfiguration" class="org.springframework.cloud.autoconfigure.RefreshAutoConfiguration" />-->
+
 	<bean id="xmlDefinedBean" class="sample.apollo.XmlDefinedBean" scope="refresh">
 		<aop:scoped-proxy />
-		<property name="version" value="#{env['local.file.version']}" />
-		<property name="version2" value="#{env['local.file2.version']}" />
+		<property name="version" value="#{env['version']}"/>
 	</bean>
 
 </beans>

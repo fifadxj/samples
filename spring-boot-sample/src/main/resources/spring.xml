@@ -9,10 +9,4 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-	<bean id="refreshAutoConfiguration" class="org.springframework.cloud.autoconfigure.RefreshAutoConfiguration" />
-
-	<bean id="settings" class="sample.springboot.rest.Settings" scope="refresh">
-		<aop:scoped-proxy />
-		<property name="value" value="#{env['version']}"/>
-	</bean>
 </beans>

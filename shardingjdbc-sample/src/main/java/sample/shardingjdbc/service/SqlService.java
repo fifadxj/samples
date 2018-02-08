@@ -21,7 +21,7 @@ import java.util.List;
 @Slf4j
 @Service
 public class SqlService {
-    @Resource(name = "shardingJdbcDataSource")
+    @Resource(name = "shardingJdbcDataSource2")
     private DataSource dataSource;
 
     @Autowired
@@ -113,6 +113,9 @@ public class SqlService {
                 List<String> row = new ArrayList<>();
                 for (int i = 1; i <= columnCount; i++) {
                     Object value = rs.getObject(i);
+                    if (value == null) {
+                        value = "";
+                    }
                     row.add(value.toString());
                 }
                 resp.getRows().add(row);

@@ -3,7 +3,14 @@ package sample.shardingjdbc;
 import cn.sccfc.cat.springaop.CatAopService;
 import cn.sccfc.cat.springboot.CatFilterConfigure;
 import cn.sccfc.cat.springmvcurl.CatPageURIRewriteAspect;
+import cn.sccfc.config.client.ConfigClient;
 import com.alibaba.druid.pool.DruidDataSource;
+import com.ctrip.framework.apollo.ConfigFile;
+import com.ctrip.framework.apollo.ConfigFileChangeListener;
+import com.ctrip.framework.apollo.ConfigService;
+import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
+import com.ctrip.framework.apollo.model.ConfigFileChangeEvent;
+import com.google.common.base.Charsets;
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
 import io.shardingjdbc.core.api.config.TableRuleConfiguration;
@@ -11,18 +18,23 @@ import io.shardingjdbc.core.api.config.strategy.InlineShardingStrategyConfigurat
 import io.shardingjdbc.core.keygen.DefaultKeyGenerator;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
+import org.springframework.cloud.context.scope.refresh.RefreshScope;
 import org.springframework.context.annotation.*;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import sample.shardingjdbc.util.algorithm.MyInlineShardingStrategyConfiguration;
 
 import javax.sql.DataSource;
+import java.io.IOException;
+import java.nio.charset.Charset;
 import java.sql.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,20 +44,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @SpringBootApplication
 @ServletComponentScan("sample.shardingjdbc")
+@Import(RefreshAutoConfiguration.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
-@Import({ CatFilterConfigure.class, CatPageURIRewriteAspect.class, CatAopService.class })
+//@Import({ CatFilterConfigure.class, CatPageURIRewriteAspect.class, CatAopService.class })
 @ImportResource({"classpath:/spring.xml"})
 //@PropertySource("classpath:/application.properties")
 public class Application {
     public static void main(String[] args) throws Exception {
-//        System.setProperty("env", "test");
+        System.setProperty("env", "dev");
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
-    public PlatformTransactionManager transactionManager() throws SQLException {
+//    @Bean
+    public PlatformTransactionManager transactionManager() throws Exception {
         DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(shardingJdbcDataSource());
+        transactionManager.setDataSource(shardingJdbcDataSource2());
 
         return transactionManager;
     }
@@ -58,7 +71,7 @@ public class Application {
         return configurer;
     }
 
-    @Bean
+/*    @Bean
     public DataSource physicalDataSource1() throws SQLException {
         String jdbcurl = "jdbc:mysql://47.96.159.210:3306/";
         String username = "root";
@@ -88,9 +101,9 @@ public class Application {
         dataSource.setFilters("mergeStat,config,cat");
 
         return dataSource;
-    }
+    }*/
 
-    @Bean
+/*    @Bean
     public DataSource shardingJdbcDataSource() throws SQLException {
         // 配置真实数据源
         Map<String, DataSource> dataSourceMap = new HashMap<>();
@@ -132,6 +145,25 @@ public class Application {
         Properties properties = new Properties();
         properties.put("sql.show", "true");
         DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap(), properties);
+
+        return dataSource;
+    }*/
+
+    @Autowired
+    private RefreshScope refreshScope;
+
+    @Bean
+    @org.springframework.cloud.context.config.annotation.RefreshScope
+    public DataSource shardingJdbcDataSource2() throws SQLException, IOException {
+        ConfigFile configFile = ConfigService.getConfigFile("shardingjdbc", ConfigFileFormat.YAML);
+        configFile.addChangeListener(new ConfigFileChangeListener() {
+            @Override
+            public void onChange(ConfigFileChangeEvent changeEvent) {
+                refreshScope.refreshAll();
+            }
+        });
+        String yamlContent = configFile.getContent();
+        DataSource dataSource = ShardingDataSourceFactory.createDataSource(yamlContent.getBytes(Charsets.UTF_8));
 
         return dataSource;
     }
