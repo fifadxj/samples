@@ -33,7 +33,8 @@
                 contentType: "application/json",
                 dataType: "json",
                 data: JSON.stringify({
-                    sql: $("#sql").val()
+                    sql: $("#sql").val(),
+                    tableIndex: $("#tableIndex").val()
                 }),
                 success: function (json) {
                     var tableHeaders = '';
@@ -81,6 +82,7 @@
 <div style="text-align:center;">
     <H3>SQL</H3>
     <textarea cols="50" rows="5" id="sql" style="width: 80%; font-size: 1.5rem"></textarea>
+    <p>TableIndex: <input type="text" id="tableIndex" /></p>
 
     <p>
         <a class="ui-button ui-widget ui-corner-all" href="#" id="query">SELECT</a>

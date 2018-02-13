@@ -1,0 +1,49 @@
+dataSources:
+  ds_0: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.156.41.19:3306/shardingjdbc_pt_0
+    username: apollo
+    password: Helloworld@123
+    maxActive: 100
+  ds_1: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.156.41.19:3306/shardingjdbc_pt_1
+    username: apollo
+    password: Helloworld@123
+    maxActive: 100
+  ds_2: !!com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.156.41.19:3306/shardingjdbc_pt_2
+      username: apollo
+      password: Helloworld@123
+      maxActive: 100
+  ds_3: !!com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.jdbc.Driver
+      url: jdbc:mysql://10.156.41.19:3306/shardingjdbc_pt_3
+      username: apollo
+      password: Helloworld@123
+      maxActive: 100
+
+shardingRule:
+  tables:
+    cps_ln:
+      actualDataNodes: ds_0.cps_ln_${0..15}, ds_1.cps_ln_${16..31}, ds_2.cps_ln_${32..47}, ds_3.cps_ln_${48..63}
+      databaseStrategy:
+        inline:
+          shardingColumn: CUST_ID
+          algorithmExpression: ds_${(CUST_ID.toLong() % 64).intdiv(16)}
+      tableStrategy:
+        inline:
+          shardingColumn: CUST_ID
+          algorithmExpression: cps_ln_${(CUST_ID.toLong() % 64)}
+      keyGeneratorColumnName: id
+      keyGeneratorClass: sample.shardingjdbc.util.MyKeyGenerator
+  bindingTables:
+    - cps_ln_$
+  #默认数据库分片策略
+  defaultDatabaseStrategy:
+    none:
+  defaultTableStrategy:
+    none:
+  props:
+    sql.show: "true"

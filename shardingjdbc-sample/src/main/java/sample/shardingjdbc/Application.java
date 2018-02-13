@@ -1,9 +1,5 @@
 package sample.shardingjdbc;
 
-import cn.sccfc.cat.springaop.CatAopService;
-import cn.sccfc.cat.springboot.CatFilterConfigure;
-import cn.sccfc.cat.springmvcurl.CatPageURIRewriteAspect;
-import cn.sccfc.config.client.ConfigClient;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.ctrip.framework.apollo.ConfigFile;
 import com.ctrip.framework.apollo.ConfigFileChangeListener;
@@ -14,9 +10,6 @@ import com.google.common.base.Charsets;
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
 import io.shardingjdbc.core.api.config.TableRuleConfiguration;
-import io.shardingjdbc.core.api.config.strategy.InlineShardingStrategyConfiguration;
-import io.shardingjdbc.core.keygen.DefaultKeyGenerator;
-import org.apache.commons.dbcp.BasicDataSource;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -27,15 +20,16 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerA
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.autoconfigure.RefreshAutoConfiguration;
 import org.springframework.cloud.context.scope.refresh.RefreshScope;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import sample.shardingjdbc.util.algorithm.MyInlineShardingStrategyConfiguration;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -71,7 +65,7 @@ public class Application {
         return configurer;
     }
 
-/*    @Bean
+    @Bean
     public DataSource physicalDataSource1() throws SQLException {
         String jdbcurl = "jdbc:mysql://47.96.159.210:3306/";
         String username = "root";
@@ -101,9 +95,9 @@ public class Application {
         dataSource.setFilters("mergeStat,config,cat");
 
         return dataSource;
-    }*/
+    }
 
-/*    @Bean
+    @Bean
     public DataSource shardingJdbcDataSource() throws SQLException {
         // 配置真实数据源
         Map<String, DataSource> dataSourceMap = new HashMap<>();
@@ -147,7 +141,7 @@ public class Application {
         DataSource dataSource = ShardingDataSourceFactory.createDataSource(dataSourceMap, shardingRuleConfig, new ConcurrentHashMap(), properties);
 
         return dataSource;
-    }*/
+    }
 
     @Autowired
     private RefreshScope refreshScope;

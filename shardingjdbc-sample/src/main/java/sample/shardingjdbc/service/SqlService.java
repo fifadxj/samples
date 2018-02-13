@@ -1,5 +1,6 @@
 package sample.shardingjdbc.service;
 
+import io.shardingjdbc.core.api.HintManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -92,7 +93,7 @@ public class SqlService {
         return resp;
     }
 
-    public SqlResp query(String sql) throws SQLException {
+    public SqlResp query(String sql, Integer tableIndex) throws SQLException {
         SqlResp resp = new SqlResp();
 
         Connection conn = null;

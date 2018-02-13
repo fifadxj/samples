@@ -26,7 +26,7 @@ public class SqlApi {
         SqlResp resp = null;
         try {
 
-            resp = sqlService.query(req.getSql());
+            resp = sqlService.query(req.getSql(), req.getTableIndex());
             //resp.printf();
         } catch (Throwable t) {
             log.error(t.getMessage(), t);
