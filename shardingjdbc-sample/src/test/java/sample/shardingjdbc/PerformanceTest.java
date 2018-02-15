@@ -123,7 +123,7 @@ public class PerformanceTest {
                 public void run() {
                     try {
                         long start = System.currentTimeMillis();
-                        SqlResp resp = sqlService.query(sql2);
+                        SqlResp resp = sqlService.query(sql2, null);
                         if (resp.isSuccess() && resp.getRows().size() == 1 && resp.getRows().get(0).get(0).equals(ii+""+ii)) {
                             inc.incrementAndGet();
                         }

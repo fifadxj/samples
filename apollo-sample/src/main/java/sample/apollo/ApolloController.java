@@ -12,24 +12,12 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 public class ApolloController {
-    //@Autowired
-    private SystemConfigProps systemConfigProps;
-
     @Autowired
     private JavaDefinedBean javaDefinedBean;
+    @Autowired
+    private XmlDefinedBean xmlDefinedBean;
 
     public ApolloController() {
-        System.out.println();
-    }
-
-    @RequestMapping(value = "/apollo/getAppConfig", method = { RequestMethod.GET })
-    @ResponseBody
-    ApolloResp getAppConfig(@RequestParam String key) throws Exception {
-        String value = systemConfigProps.getAppValue(key);
-        ApolloResp resp = new ApolloResp();
-        resp.setValue(value);
-
-        return resp;
     }
 
     @RequestMapping(value = "/apollo/getConfigs", method = { RequestMethod.GET })
@@ -37,7 +25,7 @@ public class ApolloController {
     ApolloResp getConfigs() throws Exception {
         String name = javaDefinedBean.getName();
         String value = javaDefinedBean.getValue();
-        String version = javaDefinedBean.getVersion();
+        String version = xmlDefinedBean.getVersion();
         ApolloResp resp = new ApolloResp();
         resp.setValue(name + " " + value + " " + version + " ");
 

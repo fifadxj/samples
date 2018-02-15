@@ -5,6 +5,7 @@ import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.utils.ClassLoaderUtil;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.ctrip.framework.apollo.tracer.Tracer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,7 @@ import java.util.Properties;
 @Import(RefreshAutoConfiguration.class)
 @ImportResource("classpath:/spring.xml")
 @Slf4j
-//@PropertySource({"classpath:/env/test.properties", "classpath:/env/test2.properties"})
-//@EnableApolloConfig(value = {"TEST2.cat", "application"})
+//@EnableApolloConfig(value = {"application"})
 @ComponentScan
 @EnableWebMvc
 public class ApolloConfig {
@@ -45,12 +45,9 @@ public class ApolloConfig {
     @Bean
     @org.springframework.cloud.context.config.annotation.RefreshScope
     public Properties env() {
-        ConfigPropertiesBuilder builder = new ConfigPropertiesBuilder();
-        Properties props = builder
-                .addNamespaces("application", "TEST2.cat")
-                .addLocations("/env/test.properties", "/env/test2.properties")
-                .refreshScope(refreshScope)
-                .build();
+        ApolloPropertiesFactory factory = new ApolloPropertiesFactory();
+        factory.setRefreshScope(refreshScope);
+        Properties props = factory.create();
 
         return props;
     }

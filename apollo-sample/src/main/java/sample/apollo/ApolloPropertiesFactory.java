@@ -3,56 +3,54 @@ package sample.apollo;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
-import com.ctrip.framework.apollo.core.utils.ClassLoaderUtil;
 import com.ctrip.framework.apollo.model.ConfigChangeEvent;
 import com.ctrip.framework.apollo.tracer.Tracer;
+import com.ctrip.framework.foundation.internals.provider.DefaultApplicationProvider;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.context.scope.refresh.RefreshScope;
+import org.springframework.core.io.support.PropertiesLoaderSupport;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
- * Created by za-daixiaojun on 2018/1/24.
+ * Created by za-daixiaojun on 2018/1/23.
  */
+
+@Setter
 @Slf4j
-public class ConfigPropertiesBuilder {
-    private List<String> namespaces = new ArrayList<>();
-    private List<String> locations = new ArrayList<>();
+public class ApolloPropertiesFactory extends PropertiesLoaderSupport {
     private RefreshScope refreshScope;
 
-    public ConfigPropertiesBuilder refreshScope(RefreshScope refreshScope) {
-        this.refreshScope = refreshScope;
-        return this;
-    }
+    public Properties create() {
+        Properties props = new Properties();
 
-    public Properties build() {
-        Properties remoteProps = new Properties();
+        //本地配置
+        //super.loadProperties(props);
+
+        //环境变量
+        Map<String,String> env = System.getenv();
+        props.putAll(env);
+
+        //远程配置
         List<Config> apolloConfigs = new ArrayList<Config>();
+        List<String> namespaces = loadNamespaces();
         for (String namespace : namespaces) {
             Config config = ConfigService.getConfig(namespace);
 
             for (String key : config.getPropertyNames()) {
-                remoteProps.put(key, config.getProperty(key, null));
+                props.put(key, config.getProperty(key, null));
             }
             apolloConfigs.add(config);
         }
-        configureListeners(apolloConfigs);
-
-        Properties localProps = new Properties();
-        for (String location : locations) {
-            Properties local = loadFromResource(location);
-            localProps.putAll(local);
+        if (refreshScope != null) {
+            configureListeners(apolloConfigs);
         }
 
-        localProps.putAll(remoteProps);
-
-        return localProps;
+        return props;
     }
-
 
     private void configureListeners(List<Config> configs) {
         for (Config config : configs) {
@@ -65,8 +63,8 @@ public class ConfigPropertiesBuilder {
         }
     }
 
-    private Properties loadFromResource(String namespace) {
-        InputStream in = ClassLoaderUtil.getLoader().getResourceAsStream(namespace);
+    protected static List<String> loadNamespaces() {
+        InputStream in = ApolloPropertiesFactory.class.getResourceAsStream(DefaultApplicationProvider.APP_PROPERTIES_CLASSPATH);
         Properties properties = null;
 
         if (in != null) {
@@ -76,7 +74,7 @@ public class ConfigPropertiesBuilder {
                 properties.load(in);
             } catch (IOException ex) {
                 Tracer.logError(ex);
-                log.error("Load resource config for namespace {} failed", namespace, ex);
+                log.error("Load namespaces failed", ex);
             } finally {
                 try {
                     in.close();
@@ -86,22 +84,13 @@ public class ConfigPropertiesBuilder {
             }
         }
 
-        return properties;
-    }
-
-    public ConfigPropertiesBuilder addNamespaces(String ... namespaces) {
-        for (String namespace : namespaces) {
-            this.namespaces.add(namespace);
+        List<String> namespaces = new ArrayList<>();
+        if (properties != null) {
+            String namespacesValue = (String) properties.get("namespaces");
+            String[] namespacesArray = namespacesValue.trim().split(",");
+            namespaces = Arrays.asList(namespacesArray);
         }
 
-        return this;
-    }
-
-    public ConfigPropertiesBuilder addLocations(String ... locations) {
-        for (String location : locations) {
-            this.locations.add(location);
-        }
-
-        return this;
+        return namespaces;
     }
 }

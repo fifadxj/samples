@@ -9,4 +9,30 @@
        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/springutil.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="shardingJdbcDataSource"/>
+		<property name="configLocation" value="classpath:/mybatis/sqlmap-config.xml" />
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:/mybatis/mapper/UserMapper.xml</value>
+			</list>
+		</property>
+		<property name="plugins">
+			<array>
+				<bean class="com.github.pagehelper.PageInterceptor">
+					<property name="properties">
+						<value>
+							helperDialect=mysql
+							reasonable=true
+							supportMethodsArguments=true
+							params=count=countSql
+							autoRuntimeDialect=true
+						</value>
+					</property>
+				</bean>
+				<bean class="cn.sccfc.cat.mybatis.CatMyBatisPlugin"/>
+			</array>
+		</property>
+	</bean>
+
 </beans>

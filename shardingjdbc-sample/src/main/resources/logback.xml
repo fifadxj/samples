@@ -2,7 +2,7 @@
 
 <configuration scan="true" scanPeriod="30 seconds">
 
-	<property name="log.dir" value="/logs/" />
+	<property name="log.dir" value="/home/apollo/logs/" />
 	<property name="log.level" value="INFO" />
 
     <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
@@ -13,9 +13,9 @@
     
 	<appender name="dailyAppender"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${log.dir}/daily.log</file>
+		<file>${log.dir}/shardingjdbcsample.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${log.dir}/daily.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
+			<fileNamePattern>${log.dir}/shardingjdbcsample.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
 			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5p [%c{0}] %m%n</Pattern>
@@ -26,6 +26,7 @@
 
 	<root level="${log.level}">
 		<appender-ref ref="consoleAppender" />
+		<appender-ref ref="dailyAppender" />
 	</root>
 
     <logger name="Sharding-JDBC-SQL" additivity="false" level="${log.level}">

@@ -3,8 +3,6 @@ package sample.springboot;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ImportResource;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
 @SpringBootApplication
@@ -22,5 +20,4 @@ public class Application {
 //        Date date = mapper.readValue("1506071711113", Date.class);
 //        System.out.println(date);
     }
-
 }

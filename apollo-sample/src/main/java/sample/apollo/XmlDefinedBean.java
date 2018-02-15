@@ -11,8 +11,7 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Setter
 public class XmlDefinedBean {
     public XmlDefinedBean() {
-        System.out.println();
+
     }
     private String version;
-    private String version2;
 }

@@ -12,9 +12,6 @@ import java.util.Date;
 @Getter
 @Setter
 public class Resp {
-    private String value;
-    private String version;
     private long id;
     private Date date;
-    private BigDecimal amount;
 }

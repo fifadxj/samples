@@ -10,4 +10,5 @@ import lombok.Setter;
 @Setter
 public class SqlReq {
     private String sql;
+    private Integer tableIndex;
 }

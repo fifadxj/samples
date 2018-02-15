@@ -1,0 +1,49 @@
+dataSources:
+  ds_0: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.96.159.210:3306/mycat_demo00
+    username: root
+    password: Helloworld@123
+    maxActive: 100
+  ds_1: !!com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    url: jdbc:mysql://47.96.159.210:3306/mycat_demo01
+    username: root
+    password: Helloworld@123
+    maxActive: 100
+
+shardingRule:
+  tables:
+    user:
+      actualDataNodes: ds_0.user_${0..1}, ds_1.user_${2..3}
+      databaseStrategy:
+        inline:
+          shardingColumn: id
+          algorithmExpression: ds_${(id % 4).intdiv(2)}
+      tableStrategy:
+        inline:
+          shardingColumn: id
+          algorithmExpression: user_${id % 4}
+      keyGeneratorColumnName: id
+      keyGeneratorClass: sample.shardingjdbc.util.MyKeyGenerator
+    order:
+      actualDataNodes: ds_0.order_${0..1}, ds_1.order_${2..3}
+      databaseStrategy:
+        inline:
+          shardingColumn: user_id
+          algorithmExpression: ds_${(user_id % 4).intdiv(2)}
+      tableStrategy:
+        inline:
+          shardingColumn: user_id
+          algorithmExpression: order_${user_id % 4}
+      keyGeneratorColumnName: id
+      keyGeneratorClass: sample.shardingjdbc.util.MyKeyGenerator
+  bindingTables:
+    - user,order
+  #默认数据库分片策略
+  defaultDatabaseStrategy:
+    none:
+  defaultTableStrategy:
+    none:
+  props:
+    sql.show: "true"
