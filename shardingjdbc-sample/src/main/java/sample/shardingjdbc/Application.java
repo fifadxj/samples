@@ -6,7 +6,9 @@ import com.ctrip.framework.apollo.ConfigFileChangeListener;
 import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
 import com.ctrip.framework.apollo.model.ConfigFileChangeEvent;
+import com.ctrip.framework.apollo.spring.annotation.EnableApolloConfig;
 import com.google.common.base.Charsets;
+import com.google.common.io.ByteStreams;
 import io.shardingjdbc.core.api.ShardingDataSourceFactory;
 import io.shardingjdbc.core.api.config.ShardingRuleConfiguration;
 import io.shardingjdbc.core.api.config.TableRuleConfiguration;
@@ -40,12 +42,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServletComponentScan("sample.shardingjdbc")
 @Import(RefreshAutoConfiguration.class)
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
-//@Import({ CatFilterConfigure.class, CatPageURIRewriteAspect.class, CatAopService.class })
-@ImportResource({"classpath:/spring.xml"})
+//@ImportResource({"classpath:/spring.xml"})
 //@PropertySource("classpath:/application.properties")
+@EnableApolloConfig({"application"})
 public class Application {
     public static void main(String[] args) throws Exception {
-        System.setProperty("env", "dev");
+        //System.setProperty("env", "dev");
         SpringApplication.run(Application.class, args);
     }
 

@@ -5,12 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import sample.shardingjdbc.mapper.UserMapper;
 import sample.shardingjdbc.req.SqlReq;
 import sample.shardingjdbc.resp.SqlResp;
 import sample.shardingjdbc.service.SqlService;
-
-import java.util.List;
 
 /**
  * Created by za-daixiaojun on 2018/1/9.
@@ -27,22 +24,6 @@ public class SqlApi {
         try {
 
             resp = sqlService.query(req.getSql(), req.getTableIndex());
-            //resp.printf();
-        } catch (Throwable t) {
-            log.error(t.getMessage(), t);
-            resp = new SqlResp();
-            resp.setSuccess(false);
-        }
-
-        return resp;
-    }
-
-    @RequestMapping("/queryMybatis")
-    SqlResp selectMybatis(@RequestBody SqlReq req) throws Exception {
-        SqlResp resp = null;
-        try {
-
-            resp = sqlService.mybatisQuery(req);
             //resp.printf();
         } catch (Throwable t) {
             log.error(t.getMessage(), t);

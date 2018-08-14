@@ -29,7 +29,7 @@
         <dependency>
             <groupId>io.shardingjdbc</groupId>
             <artifactId>sharding-jdbc-core</artifactId>
-            <version>2.0.2</version>
+            <version>2.0.2-sc</version>
         </dependency>
 
 <!--        <dependency>
@@ -84,12 +84,6 @@
             <version>1.1.6</version>
         </dependency>
 
-        <dependency>
-            <groupId>cn.sccfc.cat</groupId>
-            <artifactId>cat-monitor</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-        </dependency>
-
         <!-- Mybatis-分页插件 -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
@@ -100,7 +94,7 @@
         <dependency>
             <groupId>com.ctrip.framework.apollo</groupId>
             <artifactId>apollo-client</artifactId>
-            <version>0.9.1</version>
+            <version>0.9.1-sc.3</version>
         </dependency>
 
         <dependency>

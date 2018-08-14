@@ -37,4 +37,12 @@ public class ConfigClient {
 
         return null;
     }
+
+    public static void main(String[] args) {
+        System.setProperty("env", "pro");
+        String sss = getFreshProperty("version");
+        System.out.println("=====");
+        System.out.println(sss);
+        System.out.println("=====");
+    }
 }

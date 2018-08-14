@@ -1,12 +1,10 @@
 package sample.shardingjdbc.service;
 
-import io.shardingjdbc.core.api.HintManager;
+import io.shardingjdbc.core.routing.type.hint.DataNodeHintManager;
+import io.shardingjdbc.core.routing.type.hint.DataNodeSelector;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import sample.shardingjdbc.mapper.UserMapper;
-import sample.shardingjdbc.model.User;
-import sample.shardingjdbc.req.SqlReq;
 import sample.shardingjdbc.resp.SqlResp;
 import sample.shardingjdbc.util.Context;
 
@@ -21,12 +19,20 @@ import java.util.List;
  */
 @Slf4j
 @Service
+@org.springframework.cloud.context.config.annotation.RefreshScope
 public class SqlService {
     @Resource(name = "shardingJdbcDataSource2")
     private DataSource dataSource;
 
-    @Autowired
-    private UserMapper userMapper;
+    @Value("${totalTableCount}")
+    private Integer totalTableCount;
+
+    @Value("${totalDatabaseCount}")
+    private Integer totalDatabaseCount;
+
+    public SqlService() {
+        System.out.println("===");
+    }
 
     public SqlResp update(String sql) throws SQLException {
         SqlResp resp = new SqlResp();
@@ -60,7 +66,9 @@ public class SqlService {
             conn.commit();
 
         } catch (Throwable t) {
-            conn.rollback();
+            if (conn != null) {
+                conn.rollback();
+            }
             throw t;
         } finally {
             if (conn != null) {
@@ -73,27 +81,27 @@ public class SqlService {
         return resp;
     }
 
-    public SqlResp mybatisQuery(SqlReq sql) {
-        SqlResp resp = new SqlResp();
+    public SqlResp query(String sql, final Integer tableIndex) throws SQLException {
+        if (tableIndex != null) {
+            DataNodeHintManager.setDataNodeSelector(new DataNodeSelector() {
+                @Override
+                public String selectDataSourceName() {
+                    Integer tableCountOfEachDataSource = totalTableCount / totalDatabaseCount;
+                    Integer dataSourceIndex = tableIndex / tableCountOfEachDataSource;
+                    String routedDataSourceName = "ds_" + dataSourceIndex;
 
-        List<User> users = userMapper.selectBySql(sql);
-        resp.getColumnNames().add("id");
-        resp.getColumnNames().add("username");
-        resp.getColumnNames().add("password");
-        for (User user : users) {
-            List<String> row = new ArrayList<>();
-            row.add(user.getId().toString());
-            row.add(user.getUsername());
-            row.add(user.getPassword());
-            resp.getRows().add(row);
+                    return routedDataSourceName;
+                }
+
+                @Override
+                public String selectTableName(String logicalTableName) {
+                    String routedTableName = logicalTableName + "_" + tableIndex;
+
+                    return routedTableName;
+                }
+            });
         }
 
-        resp.getExecuteSqlDetails().addAll(Context.SQL_EXECUTE_LIST.get());
-
-        return resp;
-    }
-
-    public SqlResp query(String sql, Integer tableIndex) throws SQLException {
         SqlResp resp = new SqlResp();
 
         Connection conn = null;
