@@ -1,4 +1,4 @@
-package sample.redis;
+package sample.redis.single;
 
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -7,6 +7,7 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisConnectionException;
+import sample.redis.Cache;
 
 import java.util.Collections;
 

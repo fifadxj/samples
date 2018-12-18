@@ -1,4 +1,4 @@
-package sample.redis;
+package sample.redis.cluster;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.beans.factory.annotation.Value;

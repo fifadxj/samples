@@ -1,9 +1,10 @@
-package sample.redis;
+package sample.redis.cluster;
 
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import redis.clients.jedis.JedisCluster;
+import sample.redis.Cache;
 
 import java.util.Collections;
 

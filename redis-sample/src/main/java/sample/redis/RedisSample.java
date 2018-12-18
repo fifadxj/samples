@@ -2,6 +2,7 @@ package sample.redis;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import sample.redis.single.UseRedis;
 
 public class RedisSample {
     public static void main(String[] args) {
