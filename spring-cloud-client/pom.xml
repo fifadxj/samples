@@ -36,17 +36,5 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-feign</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>io.zhongan.xdy4</groupId>
-            <artifactId>user-api</artifactId>
-            <version>pii-xdy-1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.zhongan.xdy4</groupId>
-            <artifactId>trans-api</artifactId>
-            <version>pii-xdy-1.0-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 </project>

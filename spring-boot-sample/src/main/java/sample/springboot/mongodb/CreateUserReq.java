@@ -1,9 +1,8 @@
-package sample.springboot.rest;
+package sample.springboot.mongodb;
 
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -11,7 +10,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class Resp {
-    private long id;
-    private Date date;
+public class CreateUserReq {
+    private String username;
+    private String password;
 }
