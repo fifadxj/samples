@@ -1,8 +1,8 @@
-package sample.apollo;
+package sample.apollo.api;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  * Created by za-daixiaojun on 2018/1/23.
@@ -10,8 +10,9 @@ import org.springframework.cloud.context.config.annotation.RefreshScope;
 @Getter
 @Setter
 public class XmlDefinedBean {
-    public XmlDefinedBean() {
+    private String name;
 
-    }
+    private String value;
+
     private String version;
 }
