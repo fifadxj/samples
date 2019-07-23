@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
-@EnableApolloConfig(value = {"application", "app.common"})
+@EnableApolloConfig(value = {"application"})
 @ImportResource("classpath:/spring.xml")
 @Slf4j
 public class ApolloApplication {
