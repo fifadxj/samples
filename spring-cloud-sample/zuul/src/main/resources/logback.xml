@@ -3,7 +3,7 @@
 <configuration debug="false">
     <property resource="application.properties" />
     <property name="log.dir" value="${logging.path}"/>
-    <property name="log.pattern" value="%d [%thread] %-5p [%c] [%F:%L] - %msg%n"/>
+    <property name="log.pattern" value="%d [%thread] %-5p [%c] [%F:%L] [%X{X-B3-TraceId}] [%X{X-B3-ParentSpanId}] [%X{X-B3-SpanId}] - %msg%n"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <target>System.out</target>
@@ -14,9 +14,9 @@
 
     <appender name="infoAppender"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${log.dir}/eureka2.log</file>
+        <file>${log.dir}/client.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${log.dir}/eureka2.log-%d{yyyy-MM-dd}.log.zip
+            <fileNamePattern>${log.dir}/client.log-%d{yyyy-MM-dd}.log
             </fileNamePattern>
             <maxHistory>30</maxHistory>
         </rollingPolicy>
