@@ -3,9 +3,12 @@ package sample.springboot;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import sample.idgen.IdGen;
+
+import java.util.UUID;
 
 
 @org.springframework.boot.autoconfigure.SpringBootApplication
@@ -20,4 +23,5 @@ public class SpringBootApplication {
         IdGen idGen = context.getBean(IdGen.class);
         System.out.println(idGen.generate());
     }
+
 }
