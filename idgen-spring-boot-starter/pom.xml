@@ -8,17 +8,30 @@
     <artifactId>idgen-spring-boot-starter</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <dependencies>
         <dependency>
-            <groupId>sample</groupId>
-            <artifactId>idgen-spring-boot-autoconfigure</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.apache.shardingsphere</groupId>
+            <artifactId>sharding-core-common</artifactId>
+            <version>4.0.0-RC2</version>
+            <optional>true</optional>
         </dependency>
 
+<!--        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>1.5.3.RELEASE</version>
+        </dependency>-->
+
         <dependency>
-            <groupId>io.shardingjdbc</groupId>
-            <artifactId>sharding-jdbc-core</artifactId>
-            <version>2.0.0</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>1.5.3.RELEASE</version>
         </dependency>
     </dependencies>
+
 </project>
