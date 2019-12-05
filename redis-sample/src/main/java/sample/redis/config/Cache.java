@@ -1,4 +1,4 @@
-package sample.redis;
+package sample.redis.config;
 
 public interface Cache {
     Boolean put(String key, String value);

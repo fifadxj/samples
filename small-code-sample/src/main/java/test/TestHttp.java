@@ -17,29 +17,13 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class TestHttp {
     public static void main(String[] args) throws Exception {
-        ExecutorService executorService = Executors.newFixedThreadPool(20);
-
-        List<String> lines = IOUtils.readLines(new FileInputStream("D:\\temp\\ccc\\urls.txt"), "UTF-8");
-
-        final AtomicInteger i = new AtomicInteger(0);
-        for (final String line : lines) {
-            executorService.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        //System.out.println(line);
-                        HttpResponse resp = HttpUtils.get(line);
-                        String html = EntityUtils.toString(resp.getEntity(), Charsets.UTF_8);
-                        System.out.println(html);
-                        System.out.println(i.incrementAndGet());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
+        int i = 0;
+        while (i++<10) {
+            HttpResponse resp = HttpUtils.get("http://127.0.0.1:8888/a.html");
+            String html = EntityUtils.toString(resp.getEntity(), Charsets.UTF_8);
+            System.out.println(html);
         }
 
-        executorService.shutdown();
+        HttpUtils.httpclient.close();
     }
 }

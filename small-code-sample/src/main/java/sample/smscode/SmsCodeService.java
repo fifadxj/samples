@@ -35,6 +35,13 @@ public class SmsCodeService {
         }
     }
 
+    /**
+     validateTimeListKey()对应的value是一个list
+     list超时时间是x时间段内允许最多y次验证错误中的x
+     list格式: [第1次验证失败时间戳, ...第y次验证失败时间戳]
+     每次验证失败时, list头出队列，list尾追加当前时间戳
+     每次验证时, 如果List长度大于y, 且当前时间 - list头的时间戳  < x, 则拒绝验证请求
+     */
     public void validateSmsCode(String opsType, String phone, String code) {
         boolean lock = false;
         try {

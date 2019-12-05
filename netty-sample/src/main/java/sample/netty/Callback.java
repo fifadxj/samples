@@ -1,4 +1,4 @@
-package sample.netty.client;
+package sample.netty;
 
 import lombok.extern.slf4j.Slf4j;
 

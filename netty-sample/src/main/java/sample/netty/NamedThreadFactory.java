@@ -1,4 +1,4 @@
-package sample.netty.client;
+package sample.netty;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;

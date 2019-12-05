@@ -2,7 +2,8 @@ package sample.redis;
 
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import sample.redis.standalone.UseRedis;
+import sample.redis.config.Cache;
+import sample.redis.config.standalone.UseRedis;
 
 public class RedisSample {
     public static void main(String[] args) {

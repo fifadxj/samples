@@ -1,4 +1,4 @@
-package sample.netty.server;
+package sample.netty.v3;
 
 import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;

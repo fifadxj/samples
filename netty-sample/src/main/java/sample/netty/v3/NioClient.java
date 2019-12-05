@@ -1,4 +1,4 @@
-package sample.netty.client;
+package sample.netty.v3;
 
 import com.google.common.base.Charsets;
 import lombok.extern.slf4j.Slf4j;
@@ -8,11 +8,10 @@ import org.jboss.netty.buffer.ChannelBuffers;
 import org.jboss.netty.channel.*;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.handler.codec.frame.FrameDecoder;
+import sample.netty.Callback;
 
 import java.io.*;
 import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;

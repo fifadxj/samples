@@ -6,29 +6,27 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.TransactionCallback;
+import org.springframework.transaction.support.TransactionTemplate;
 import sample.mybatis.mapper.UserMapper;
+import sample.mybatis.mapper2.UserMapper2;
 import sample.mybatis.vo.User;
+
+import javax.annotation.Resource;
 
 
 @SpringBootApplication
 @ComponentScan({"sample.mybatis"})
 @ImportResource({"classpath*:spring/**/*.xml"})
-@EnableAutoConfiguration
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @Slf4j
-@MapperScan("sample.mybatis.mapper")
+@MapperScan(value = "sample.mybatis.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisApplication {
     public static void main(String[] args) throws Exception {
         ApplicationContext context = SpringApplication.run(MybatisApplication.class, args);
-        System.out.println("===");
-        UserMapper userMapper = context.getBean(UserMapper.class);
-        User user = new User();
-        user.setName("terry");
-        user.setPwd("terry");
-        userMapper.insertSelective(user);
-        System.out.println();
     }
 }
