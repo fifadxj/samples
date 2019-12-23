@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
@@ -23,6 +24,7 @@ import javax.annotation.Resource;
 @ComponentScan({"sample.mybatis"})
 @ImportResource({"classpath*:spring/**/*.xml"})
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableConfigurationProperties(PropConfig.class)
 @Slf4j
 @MapperScan(value = "sample.mybatis.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class MybatisApplication {

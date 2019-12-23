@@ -1,37 +1,30 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-       xmlns:context="http://www.springframework.org/schema/context"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans
-							http://www.springframework.org/schema/beans/spring-beans.xsd
-							http://code.alibabatech.com/schema/dubbo
-							http://code.alibabatech.com/schema/dubbo/dubbo.xsd
-							http://www.springframework.org/schema/context 
-							http://www.springframework.org/schema/context/spring-context.xsd">
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans xmlns="http://www.springframework.org/schema/beans"-->
+       <!--xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+       <!--xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"-->
+       <!--xmlns:context="http://www.springframework.org/schema/context"-->
+       <!--xsi:schemaLocation="http://www.springframework.org/schema/beans-->
+							<!--http://www.springframework.org/schema/beans/spring-beans.xsd-->
+							<!--http://code.alibabatech.com/schema/dubbo-->
+							<!--http://code.alibabatech.com/schema/dubbo/dubbo.xsd-->
+							<!--http://www.springframework.org/schema/context -->
+							<!--http://www.springframework.org/schema/context/spring-context.xsd">-->
 
+    <!--&lt;!&ndash; 提供方应用信息，用于计算依赖关系 &ndash;&gt;-->
+    <!--<dubbo:application name="${dubbo.application.name}"/>-->
 
-    <!-- 提供方应用信息，用于计算依赖关系 -->
-    <dubbo:application name="dubbo-client"/>
+    <!--&lt;!&ndash; 注册中心暴露服务地址 &ndash;&gt;-->
+    <!--<dubbo:registry protocol="${dubbo.registry.protocol}" address="${dubbo.registry.address}"-->
+                    <!--group="${dubbo.registry.group}" timeout="10000" default="true"/>-->
 
-    <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="${zookeeper_address}" protocol="zookeeper" group="scfws" id="loan"/>
+    <!--&lt;!&ndash; dubbo 协议配置 &ndash;&gt;-->
+    <!--<dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}"-->
+                    <!--accesslog="${dubbo.protocol.accesslog}"-->
+                    <!--threads="${dubbo.protocol.threads}" threadpool="${dubbo.protocol.threadpool}"/>-->
 
-    <dubbo:registry address="${zookeeper_address}" protocol="zookeeper" group="scfws" id="scfws"/>
+    <!--<dubbo:provider timeout="${dubbo.provider.timeout}"/>-->
+    <!--<dubbo:consumer check="false"/>-->
 
-    <dubbo:consumer check="false"/>
+    <!--<dubbo:reference id="dubboApi" interface="sample.dubbo.server.api.DubboApi" version="1" />-->
 
-<!--
-    <dubbo:reference id="customMappingOperationService" version="1.0.0" interface="com.allinfinance.adm.service.api.CustomMappingOperationService"/>
-
-    <dubbo:reference id="lookupCustomIdService" version="1.0.0" interface="com.allinfinance.adm.service.api.LookupCustomIdService"/>
--->
-
-    <!--<dubbo:reference id="memberService" version="1.0.0" interface="cn.sccfc.basebiz.members.membersws.api.MemberService" check="false" />-->
-
-    <dubbo:reference id="userAuthService" version="1.0.0" interface="cn.sccfc.usercenter.scuserauthws.api.UserAuthService" check="false" registry="scfws" />
-
-    <!--<dubbo:reference id="userApi" version="1.0.0" interface="cn.sccfc.zacps.user.api.api.UserApi" check="false" group="scfws"/>-->
-
-    <dubbo:reference id="userCertificationService" version="1.0.0" interface="cn.sccfc.usercenter.usercertification.api.UserCertificationService" check="false" registry="loan" />
-</beans>
+<!--</beans>-->

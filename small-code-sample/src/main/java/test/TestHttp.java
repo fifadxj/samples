@@ -23,7 +23,5 @@ public class TestHttp {
             String html = EntityUtils.toString(resp.getEntity(), Charsets.UTF_8);
             System.out.println(html);
         }
-
-        HttpUtils.httpclient.close();
     }
 }
