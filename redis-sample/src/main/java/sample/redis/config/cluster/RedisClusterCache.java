@@ -3,6 +3,7 @@ package sample.redis.config.cluster;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.params.SetParams;
 import sample.redis.config.Cache;
 
 import java.util.Collections;
@@ -47,7 +48,8 @@ public class RedisClusterCache implements Cache {
     
     @Override
     public Boolean lock(String key, String value, int seconds) {
-        String resp = jedisCluster.set(key, value, "NX", "EX", seconds);
+        //String resp = jedisCluster.set(key, value, "NX", "EX", seconds);
+        String resp = jedisCluster.set(key, value, SetParams.setParams().nx().ex(seconds));
 
         return resp != null && resp.equals(SUCCESS_CODE);
     }

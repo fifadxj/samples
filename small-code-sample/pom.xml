@@ -93,5 +93,31 @@
             <version>2.8.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.nintha</groupId>
+            <artifactId>webp-imageio-core</artifactId>
+            <version>0.1.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/webp-imageio-core-0.1.3.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-core</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.csp</groupId>
+            <artifactId>sentinel-transport-simple-http</artifactId>
+            <version>1.7.1</version>
+        </dependency>
+
     </dependencies>
 </project>

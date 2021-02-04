@@ -11,7 +11,6 @@ import redis.clients.jedis.JedisCluster;
 import java.util.HashSet;
 import java.util.Set;
 
-@Configuration
 @PropertySource("classpath:/application.properties")
 public class UseRedisCluster {
     @Value("${redis.timeout}")

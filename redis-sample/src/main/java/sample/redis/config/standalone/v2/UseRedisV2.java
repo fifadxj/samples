@@ -1,13 +1,15 @@
-package sample.redis.config.standalone;
+package sample.redis.config.standalone.v2;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import redis.clients.jedis.*;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+import sample.redis.config.standalone.RedisCache;
 
 @PropertySource("classpath:/application.properties")
-public class UseRedis {
+public class UseRedisV2 {
     @Value("${redis.timeout}")
     private Integer timeout;
     @Value("${redis.address}")
@@ -35,8 +37,8 @@ public class UseRedis {
     }
 
     @Bean
-    public RedisCache redisCache() {
-        RedisCache cache = new RedisCache();
+    public RedisCacheV2 redisCache() {
+        RedisCacheV2 cache = new RedisCacheV2();
         return cache;
     }
 }

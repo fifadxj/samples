@@ -1,14 +1,21 @@
-package sample.redis.config.standalone;
+package sample.redis.config.standalone.v2;
 
+import com.google.common.base.Charsets;
+import com.google.common.collect.Lists;
+import com.google.common.io.Files;
+import com.google.common.io.Resources;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.exceptions.JedisConnectionException;
-import redis.clients.jedis.params.SetParams;
+import redis.clients.jedis.exceptions.JedisException;
 import sample.redis.config.Cache;
 
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.net.URL;
 import java.util.Collections;
 
 /**
@@ -16,10 +23,37 @@ import java.util.Collections;
  */
 @Setter
 @Slf4j
-public class RedisCache implements Cache {
+public class RedisCacheV2 implements Cache {
     private static final String SUCCESS_CODE = "OK";
-    
-    private static final Long RELEASE_SUCCESS = 1L;
+    private static final String SCRIPT_SUCCESS = "1";
+    private static final String NO_SCRIPT = "NOSCRIPT";
+    private String lockScript;
+    private String unlockScript;
+    private String lockSHA;
+    private String unlockSHA;
+
+    @PostConstruct
+    public void init() {
+        URL lockFile = Resources.getResource("lock.lua");
+        URL unlockFile = Resources.getResource("unlock.lua");
+        try {
+            lockScript = Resources.toString(lockFile, Charsets.UTF_8);
+            unlockScript = Resources.toString(unlockFile, Charsets.UTF_8);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Jedis jedis = null;
+        try {
+            jedis = jedisPool.getResource();
+            lockSHA = jedis.scriptLoad(lockScript);
+            unlockSHA = jedis.scriptLoad(unlockScript);
+        } finally {
+            if (jedis != null) {
+                jedis.close();
+            }
+        }
+    }
 
     @Autowired
     private JedisPool jedisPool;
@@ -92,18 +126,22 @@ public class RedisCache implements Cache {
             }
         }
     }
-    
+
     @Override
     public Boolean lock(String key, String value, int seconds) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            //String resp = jedis.set(key, value, "NX", "EX", seconds);
-            String resp = jedis.set(key, value, SetParams.setParams().nx().ex(seconds));
+            String resp = (String) jedis.evalsha(lockSHA, Lists.newArrayList(key), Lists.newArrayList(seconds + "", value));
 
-            return resp != null && resp.equals(SUCCESS_CODE);
-        } catch (JedisConnectionException e) {
-            log.error("redis connection error", e);
+            return resp != null && resp.equals(SCRIPT_SUCCESS);
+        } catch (JedisException e) {
+            if (e.getMessage() != null && e.getMessage().startsWith(NO_SCRIPT)) {
+                log.warn("lock script not loaded, loading script");
+                init();
+                return lock(key, value, seconds);
+            }
+            log.error("redis error", e);
             return false;
         } finally {
             if (jedis != null) {
@@ -111,17 +149,22 @@ public class RedisCache implements Cache {
             }
         }
     }
-    
+
     @Override
     public Boolean unlock(String key, String value) {
         Jedis jedis = null;
         try {
             jedis = jedisPool.getResource();
-            String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-            Object result = jedis.eval(script, Collections.singletonList(key), Collections.singletonList(value));
-            return RELEASE_SUCCESS.equals(result);
-        } catch (JedisConnectionException e) {
-            log.error("redis connection error", e);
+            String resp = (String) jedis.evalsha(unlockSHA, Lists.newArrayList(key), Lists.newArrayList(value));
+
+            return resp != null && resp.equals(SCRIPT_SUCCESS);
+        } catch (JedisException e) {
+            if (e.getMessage() != null && e.getMessage().startsWith(NO_SCRIPT)) {
+                log.warn("lock script not loaded, loading script");
+                init();
+                return unlock(key, value);
+            }
+            log.error("redis error", e);
             return false;
         } finally {
             if (jedis != null) {
